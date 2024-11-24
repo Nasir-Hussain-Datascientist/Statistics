@@ -1,243 +1,245 @@
 ---
-title: "Analyzing House Pricing in the USA - Case Study"
-author: "XYZ"
-date: "2024-11-23"
+title: "Understanding the p-value: A Case Study with Real Estate Data"
+author: "Khalifa Alghafri"
 output: ioslides_presentation
 ---
 <style type="text/css">
-/* General font size and layout adjustments */
-body, div, h1, h2, h3, h4, h5, p {
-  font-size: 14px;  /* Standard font size for text */
-  line-height: 1.4; /* Ensure lines are spaced properly */
+  body p, div, h1, h2, h3, h4, h5 {
+    color: black;
+    font-family: Modern Computer Roman;
+    font-size: 16px; /* Adjust font size for better fit */
+    line-height: 1.3; /* Adjust line spacing */
+  }
+
+  h1, h2 {
+    font-size: 24px; /* Reduce header font size */
+    color: #8C1D40; /* Maroon color for emphasis */
+  }
+
+  .slide {
+  padding: 10px;
+  margin-top: 0; /* Remove top margin to avoid header cut-off */
 }
 
-h1 {
-  font-size: 30px;  /* Larger title font size */
-  color: #8C1D40;  /* Title color */
-  margin-top: 10px;  /* Add top margin to prevent title from being cut off */
-  margin-bottom: 20px;  /* Space below the title for better visibility */
-}
+  .slide h1, .slide h2, .slide h3, .slide h4 {
+    margin-bottom: 10px; /* Add some spacing after headers */
+  }
 
-h2 {
-  font-size: 24px;  /* Subheading font size */
-  color: #4A90E2;
-}
+  .content {
+    font-size: 14px; /* Set content font size to fit more text */
+  }
 
-h3 {
-  font-size: 20px;  /* Smaller subheading */
-}
+  /* Adjust slide title styles */
+  .slide-title-slide hgroup h1 {
+    font-size: 28px; /* Title size for the first slide */
+  }
 
-h4, h5 {
-  font-size: 18px;  /* Further smaller subheadings */
-}
-
-p {
-  font-size: 14px;  /* Paragraph text size */
-}
-
-code, pre {
-  font-size: 12px;  /* Code block text size */
-  white-space: pre-wrap;  /* Ensure long lines of code wrap to next line */
-  word-wrap: break-word;
-}
-
-/* Adjust slide navigation arrows size */
-.slidenav {
-  font-size: 16px;  /* Navigation arrow font size */
-}
-
-/* Adjust slide container layout */
-.slide {
-  padding: 20px;  /* Increase padding around the content */
-  margin: 0;
-  height: 80vh;  /* Ensure slide height fits within the viewport */
-  overflow: auto;  /* Allow scrolling for overflow content */
-  text-align: left;  /* Left-align content */
-  padding-top: 50px; /* Add more space at the top for titles */
-  padding-bottom: 50px; /* Add space at the bottom to prevent content from touching the bottom */
-}
-
-/* Ensure that content within slides does not overflow */
-.slide-content {
-  max-width: 100%;
-  overflow: auto;  /* Allow scrolling within content */
-}
-
-/* Make images and graphs fit well */
-img, .plotly-graph-div, .ggplot {
-  width: 75%;  /* Set image and plot width to 75% */
-  height: auto;  /* Maintain aspect ratio */
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Adjust plotly graph size */
-.plotly-graph-div {
-  max-width: 100%;
-  height: 400px;  /* Set max height for Plotly graphs */
-  margin: 0 auto;
-}
-
-/* Adjust ggplot image size */
-.ggplot {
-  max-width: 100%;
-  height: 350px;  /* Set max height for ggplot images */
-  margin: 0 auto;
-}
-
-/* Make sure math text doesn't overflow */
-.math {
-  font-size: 14px;  /* Math text font size */
-}
+  .r-code {
+    font-size: 14px; /* Reduce code font size for better fit */
+  }
 </style>
+## Introduction to the p-value
 
-## Introduction
-
-- **Topic:** Simple Linear Regression
-  - A powerful statistical method for modeling the relationship between two variables.
-  - Commonly used for prediction and determining the strength of relationships.
-- **Application:** Predicting house prices in the USA.
-  - The real estate market is a key indicator of economic health.
-  - Accurate predictions are essential for buyers, sellers, and policymakers.
-- **Focus of This Presentation:**
-  - Use **Simple Linear Regression** to understand and predict house prices based on key factors such as **size**, **number of bedrooms**, and **location**.
-
-
-## Goal of the Presentation
-
-- **Primary Objective**:
-  - Explore how house prices in the USA are influenced by various factors.
-  - Build a predictive model using Simple Linear Regression.
-
-- **Why This Matters:**
-  - Provides insights for smarter real estate decisions.
-  - Demonstrates the practical application of statistical methods in finance.
-
-- **How This Will Be Achieved:**
-  - Analyzing house price data with visualization tools like **ggplot2** and **plotly**.
-  - Using R code to model relationships and make predictions.
-  - Explaining the results through statistical concepts and LaTeX math notations.
+- The **p-value** is a key concept in hypothesis testing, used to quantify the evidence against a null hypothesis.
+- In this presentation, we will:
+  - Define the p-value and explain its significance.
+  - Explore a real-world example using a dataset of real estate prices.
+  - Perform hypothesis testing to determine if waterfront properties have higher prices than non-waterfront properties.
+- Tools and visualizations will include:
+  - Statistical testing in R.
+  - Interactive and static plots with `plotly` and `ggplot2`.
 
 
+## What is the p-value?
+
+- The **p-value** is the probability of observing results as extreme as (or more extreme than) the ones observed, assuming the null hypothesis is true.
+- It helps answer the question: *"Are the observed data due to chance, or is there an actual effect?"*
+  
+### Key Points:
+1. **Small p-value (e.g., ≤ 0.05)**:
+   - Strong evidence against the null hypothesis.
+   - We may reject the null hypothesis.
+2. **Large p-value (> 0.05)**:
+   - Weak evidence against the null hypothesis.
+   - Fail to reject the null hypothesis.
+
+## Formula for Test Statistic:
+\[
+T = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}}
+\]
+Where:
+- \(\bar{X}_1, \bar{X}_2\): Sample means.
+- \(s_1^2, s_2^2\): Sample variances.
+- \(n_1, n_2\): Sample sizes.
+
+## Real-World Example: Real Estate Data
+Source : https://www.kaggle.com/code/fareedalianwar/house-price/input?select=data.csv
+
+-  Dataset Overview
+
+ The dataset contains property sales records, including features such as:
+   **Price**: Sale price of the property.
+   **Bedrooms, Bathrooms**: Number of bedrooms and bathrooms.
+   **sqft_living**: Square footage of the living area.
+   **Waterfront**: Whether the property has a waterfront view (1 = Yes, 0 = No).
+   And more...
+
+## Objective
+- **Hypothesis**:
+Do properties with a waterfront view have significantly higher average prices than properties without a waterfront view?
+
+### Hypotheses
+
+1. **Null Hypothesis (\(H_0\))**: The average prices of waterfront and non-waterfront properties are the same.
+2. **Alternative Hypothesis (\(H_1\))**: Waterfront properties have a higher average price than non-waterfront properties.
+
+
+## Data Exploration
+
+### Key Steps in Exploring the Data
+1. **Summary Statistics**:
+   - Compare the average property prices for waterfront and non-waterfront properties.
+   - Look at the spread of data (e.g., standard deviation, range).
+2. **Visualizing the Data**:
+   - Plot price distributions for both groups to observe patterns.
+
+## Summary Sraristics Formula
+
+- **Mean**: \(\bar{X} = \frac{1}{n} \sum_{i=1}^{n} X_i\)
+- **Standard Deviation**: \(\sigma = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (X_i - \bar{X})^2}\)
+- **Median**: The middle value in the dataset when ordered.
 
 
 
-
-##  **Proceed to Exploratory Data Analysis**
-The dataset is loaded,   creating visualizations like histograms or scatter plots. Us ggplot2 
-```{r}
-## Code for Distribution of House Prices
-
-
-# Ensure the scales package is loaded
-library(ggplot2)
-library(scales)
-house_data <- read.csv('data.csv')
-# Create the plot 
-plot <- ggplot(house_data, aes(x = price)) +
-  geom_histogram(fill = "blue", color = "white", bins = 30) +
-  scale_x_log10(labels = scales::comma) +  # Log scale on x-axis
-  labs(
-    title = "Distribution of House Prices (Log Scale)",
-    x = "Log of Price (USD)",
-    y = "Frequency"
+## Summary Statistics Example (R Code):
+```{r,echo=TRUE, message=FALSE, warning=FALSE, r,echo=TRUE}
+# Load necessary libraries
+library(dplyr)
+data <- read.csv("data.csv")
+# Calculate summary statistics
+summary_stats <- data %>%
+  group_by(waterfront) %>%
+  summarize(
+    mean_price = mean(price, na.rm = TRUE),
+    median_price = median(price, na.rm = TRUE),
+    sd_price = sd(price, na.rm = TRUE),
+    count = n()
   )
-
-# Save the plot to a file (e.g., "house_price_distribution.png")
-ggsave("house_price_distribution.png", plot = plot, width = 8, height = 6)
 ```
 
-## Plot of House Prices Distribution
-
-![](house_price_distribution.png)
-
-## Correlation between price and square footage
+## Results 
 ```{r}
+print(summary_stats)
+```
+### Explanation:
 
-# Scatter plot of price vs. square footage of living space
-ggplot(house_data, aes(x = sqft_living, y = price)) +
-  geom_point(color = "blue") +
-  geom_smooth(method = "lm", color = "red", se = FALSE) +  # Adding linear regression line
-  labs(
-    title = "Relationship Between House Price and Living Area",
-    x = "Square Footage (Living Area)",
-    y = "Price (USD)"
-  ) -> plot1
+***Waterfront Properties:*** Have a higher average price ($1,451,621) compared to non-waterfront properties ($545,462), as well as a larger standard deviation.
+***Sample Size:*** There are 33 waterfront properties compared to 4,567 non-waterfront properties, indicating a smaller sample for waterfront properties.
+This shows clear differences in the statistics, which we will use to test our hypothesis
 
-# Save the plot to a file
-ggsave("price_vs_sqft_living.png", plot = plot1, width = 8, height = 6)
+## Hypothesis Testing: Two-Sample t-Test
+
+### Objective:
+We will use a **two-sample t-test** to test the hypothesis that waterfront properties have higher average prices than non-waterfront properties.
+
+### Null Hypothesis (\(H_0\)):
+The mean price of waterfront properties is equal to the mean price of non-waterfront properties.  
+\( H_0: \mu_{\text{waterfront}} = \mu_{\text{non-waterfront}} \)
+
+### Alternative Hypothesis (\(H_1\)):
+The mean price of waterfront properties is higher than the mean price of non-waterfront properties.  
+\( H_1: \mu_{\text{waterfront}} > \mu_{\text{non-waterfront}} \)
+
+We will perform a **one-tailed** t-test to test this hypothesis.
+
+
+## Code to Perform the Two-Sample t-Test
+```{r,echo=TRUE, results='markup'}
+# Perform the t-test
+t_test_result <- t.test(price ~ waterfront,
+      data = data, alternative = "greater")
+
+# Display the results
+t_test_result
+```
+
+## t-Test Explanation
+
+- **t-statistic**: -3.6485
+
+  The negative t-statistic indicates that, on average, waterfront properties have lower prices than non-waterfront properties. This is the opposite of our hypothesis that waterfront properties would have higher prices.
+
+- **p-value**: 0.9995
+
+  The p-value is extremely high (greater than 0.05), meaning there is very little evidence to reject the null hypothesis.
+  We cannot conclude that waterfront properties have higher prices based on this data.
+
+- **95% Confidence Interval**: [-1,326,837, Inf]
+
+  The confidence interval for the difference in means includes negative values, further suggesting that the difference in prices could be in favor of non-waterfront properties.
+
+
+## Conclusion
+
+- Based on the results of the t-test:
+  - **p-value = 0.9995**, which is much larger than the significance level of 0.05.
+  - We **fail to reject the null hypothesis** that the mean price of waterfront and non-waterfront properties is the same.
+  
+- **Interpretation**: There is **no significant evidence** that waterfront properties have higher average prices than non-waterfront properties in this dataset.
+
+- The analysis suggests that the prices of waterfront properties might not differ as expected from non-waterfront properties based on the data provided.
+
+## plotly plot
+
+```{r message=FALSE, warning=FALSE,echo=TRUE}
+
+library(plotly)
+plot_ly(data = data, x = ~sqft_living, y = ~price, z = ~waterfront, type = 'scatter3d', mode = 'markers')
+
 ```
 
 
-## The plot
-![](price_vs_sqft_living.png)
-## Simple Linear Regression (Price vs Living Area)
+## ggplot1
+
+```{r  out.width='60%', out.height='60%'}
+library(ggplot2)
+
+# Price distribution plot
+ggplot(data, aes(x = factor(waterfront), y = price)) +
+  geom_boxplot() +
+  labs(title = "Price Distribution: Waterfront vs Non-Waterfront")
 
 
-```{r}
-# Fit a simple linear regression model
-lm_model <- lm(price ~ sqft_living, data = house_data)
 
-# Summarize the model
-summary(lm_model)
-
-# Plot the regression line
-ggplot(house_data, aes(x = sqft_living, y = price)) +
-  geom_point(color = "blue") +
-  geom_smooth(method = "lm", color = "red", se = FALSE) +
-  labs(
-    title = "Linear Regression Model: Price vs. Living Area",
-    x = "Square Footage (Living Area)",
-    y = "Price (USD)"
-  ) -> plot3
-
-# Save the plot to a file
-ggsave("price_vs_sqft_living_regression.png", plot = plot3, width = 8, height = 6)
 ```
-## plot
 
-![](price_vs_sqft_living_regression.png)
-## Residuals from the Linear Regression Model
-```{r}
-# Calculate and plot residuals of the linear regression model
-house_data$residuals <- resid(lm_model)
 
-ggplot(house_data, aes(x = sqft_living, y = residuals)) +
-  geom_point(color = "red") +
-  labs(
-    title = "Residuals of the Linear Regression Model",
-    x = "Square Footage (Living Area)",
-    y = "Residuals"
-  ) -> plot4
+## ggplot2
 
-# Save the plot to a file
-ggsave("regression_residuals.png", plot = plot4, width = 8, height = 6)
+
+```{r fig.width=5, fig.height=4}
+# Scatter plot of sqft vs price
+ggplot(data, aes(x = sqft_living, y = price)) +
+  geom_point(aes(color = factor(waterfront))) +
+  labs(title = "Price vs Square Footage")
+
 ```
-## Slide 8: Display the Saved Plot
 
-![](regression_residuals.png)
-## Multiple Linear Regression (Price Prediction)
 
-```{r}
-# Fit a multiple linear regression model using multiple predictors
-lm_multiple <- lm(price ~ sqft_living + bedrooms + bathrooms, data = house_data)
 
-# Summarize the model
-summary(lm_multiple)
+## Final Thoughts
 
-# Predictions from the multiple regression model
-house_data$predicted_price <- predict(lm_multiple, newdata = house_data)
+- **Key Takeaways**:
 
-ggplot(house_data, aes(x = predicted_price, y = price)) +
-  geom_point(color = "blue") +
-  labs(
-    title = "Predicted vs Actual Price",
-    x = "Predicted Price (USD)",
-    y = "Actual Price (USD)"
-  ) -> plot5
+  The **p-value** is a critical tool in hypothesis testing, helping us assess the strength of evidence against the null hypothesis.
+  
+  In our real estate example, the p-value of **0.9995** led us to **fail to reject the null hypothesis**, meaning there's no significant evidence that waterfront properties have higher prices than non-waterfront ones.
+  This shows the importance of understanding and interpreting statistical results properly, especially in real-world applications like real estate.
 
-# Save the plot to a file
-ggsave("predicted_vs_actual_price.png", plot = plot5, width = 8, height = 6)
-```
-## Display the Saved Plot
-![](predicted_vs_actual_price.png)
+- **Implications**:
+
+While the initial hypothesis was not supported, the analysis emphasizes the need to thoroughly evaluate data and assumptions before drawing conclusions.
+The example demonstrates how statistical tools can help make data-driven decisions in industries like real estate.
+
+Thank you for your attention!
+
