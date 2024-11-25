@@ -38,22 +38,24 @@ output: ioslides_presentation
     font-size: 14px; /* Reduce code font size for better fit */
   }
 </style>
-## Introduction to the p-value
 
-- The **p-value** is a key concept in hypothesis testing, used to quantify the evidence against a null hypothesis.
+## Definition of p value
+
+The **p-value** is an important term used in hypothesis testing that measures the significance of data against a null hypothesis.
 - In this presentation, we will:
-  - Define the p-value and explain its significance.
-  - Explore a real-world example using a dataset of real estate prices.
-  - Perform hypothesis testing to determine if waterfront properties have higher prices than non-waterfront properties.
+  Determine the meaning and importance of p-value.
+  – Use an example using actual data on real estate prices.
+  - Carry out hypothesis testing with a view of establishing whether the prices of water fronting have higher prices than those which are not water fronting.
 - Tools and visualizations will include:
   - Statistical testing in R.
-  - Interactive and static plots with `plotly` and `ggplot2`.
+  Mean/gross, standard deviation/distribution, correlation between variables/features, distribution of features, principal components analysis.
 
 
 ## What is the p-value?
 
-- The **p-value** is the probability of observing results as extreme as (or more extreme than) the ones observed, assuming the null hypothesis is true.
-- It helps answer the question: *"Are the observed data due to chance, or is there an actual effect?"*
+
+The main measure of association used in the study is known as the **p-value** which is equal to the chance of obtaining results as extreme as, or even more extreme than, those recorded, given that the null hypothesis is actually true.
+- It helps answer the question: >*How can this result be explained: was the effect random, or is there truly an effect?
   
 ### Key Points:
 1. **Small p-value (e.g., ≤ 0.05)**:
@@ -63,7 +65,9 @@ output: ioslides_presentation
    - Weak evidence against the null hypothesis.
    - Fail to reject the null hypothesis.
 
+
 ## Formula for Test Statistic:
+
 \[
 T = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}}
 \]
@@ -72,7 +76,9 @@ Where:
 - \(s_1^2, s_2^2\): Sample variances.
 - \(n_1, n_2\): Sample sizes.
 
+
 ## Real-World Example: Real Estate Data
+
 Source : https://www.kaggle.com/code/fareedalianwar/house-price/input?select=data.csv
 
 -  Dataset Overview
@@ -84,17 +90,21 @@ Source : https://www.kaggle.com/code/fareedalianwar/house-price/input?select=dat
    **Waterfront**: Whether the property has a waterfront view (1 = Yes, 0 = No).
    And more...
 
+
 ## Objective
+
 - **Hypothesis**:
-Do properties with a waterfront view have significantly higher average prices than properties without a waterfront view?
+The initial research question is: Are the average prices of the properties with a waterfront view much higher or lower than the average price of the properties without a waterfront view?
 
 ### Hypotheses
 
-1. **Null Hypothesis (\(H_0\))**: The average prices of waterfront and non-waterfront properties are the same.
-2. **Alternative Hypothesis (\(H_1\))**: Waterfront properties have a higher average price than non-waterfront properties.
+1. **Null Hypothesis (\(H_0\))**: As for the average price for each house, there is no difference between the prices of the house by the water and the prices of the other houses.
+
+2. **Alternative Hypothesis (\(H_1\))**:  Moving to the property price aspect the data presented shows that the price of houses along the waterfront is higher compared to houses that are not located in the region.
 
 
 ## Data Exploration
+
 
 ### Key Steps in Exploring the Data
 1. **Summary Statistics**:
@@ -104,6 +114,7 @@ Do properties with a waterfront view have significantly higher average prices th
    - Plot price distributions for both groups to observe patterns.
 
 ## Summary Sraristics Formula
+
 
 - **Mean**: \(\bar{X} = \frac{1}{n} \sum_{i=1}^{n} X_i\)
 - **Standard Deviation**: \(\sigma = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (X_i - \bar{X})^2}\)
@@ -140,7 +151,7 @@ This shows clear differences in the statistics, which we will use to test our hy
 ## Hypothesis Testing: Two-Sample t-Test
 
 ### Objective:
-We will use a **two-sample t-test** to test the hypothesis that waterfront properties have higher average prices than non-waterfront properties.
+To do this we will use the **two sample t-test** to compare the mean price of waterfront properties with the mean of non-waterfront properties.
 
 ### Null Hypothesis (\(H_0\)):
 The mean price of waterfront properties is equal to the mean price of non-waterfront properties.  
@@ -167,16 +178,17 @@ t_test_result
 
 - **t-statistic**: -3.6485
 
-  The negative t-statistic indicates that, on average, waterfront properties have lower prices than non-waterfront properties. This is the opposite of our hypothesis that waterfront properties would have higher prices.
+ The negative t-statistic signifies that the non water front properties have been found to be expensive than water front properties – on average. Surprisingly, this goes contrary to our expectation that properties near the water front would attract higher price.
+
 
 - **p-value**: 0.9995
 
-  The p-value is extremely high (greater than 0.05), meaning there is very little evidence to reject the null hypothesis.
-  We cannot conclude that waterfront properties have higher prices based on this data.
+It is also very important to note that the p-value value is greater than 0.05; therefore, there is very little evidence that the null hypothesis should be rejected.
+  Using this data, we can not say that waterfront properties are more costly.
 
 - **95% Confidence Interval**: [-1,326,837, Inf]
 
-  The confidence interval for the difference in means includes negative values, further suggesting that the difference in prices could be in favor of non-waterfront properties.
+  The confidence interval of the difference of the means is negative which pointed out that the difference of the prices might also favor a non-waterfront property.
 
 
 ## Conclusion
@@ -231,15 +243,14 @@ ggplot(data, aes(x = sqft_living, y = price)) +
 
 - **Key Takeaways**:
 
-  The **p-value** is a critical tool in hypothesis testing, helping us assess the strength of evidence against the null hypothesis.
+  The **p-value** is one of the major tools used in hypothesis testing because it allows us to gauge how much evidence there is against the null hypothesis.
   
-  In our real estate example, the p-value of **0.9995** led us to **fail to reject the null hypothesis**, meaning there's no significant evidence that waterfront properties have higher prices than non-waterfront ones.
-  This shows the importance of understanding and interpreting statistical results properly, especially in real-world applications like real estate.
+   In our real estate example we saw that the p - value was close to 1; in fact, it was 0.9995, which made us **not reject the null hypothesis** and, thus, we found no evidence that supports the hypothesis that waterfront property is overpriced than the non-waterfront property.
+  This brings out the need for correct interpretation of statistical results as well as getting the right results for various applications that include real estate.
 
 - **Implications**:
 
-While the initial hypothesis was not supported, the analysis emphasizes the need to thoroughly evaluate data and assumptions before drawing conclusions.
-The example demonstrates how statistical tools can help make data-driven decisions in industries like real estate.
+Even though the first hypothesis was not confirmed, the research scrutinizes the importance of proper assessment of the data and assumptions.
+The example also shows that statistical tools allows being more informative in making decisions in various industries including real estate.
 
 Thank you for your attention!
-
